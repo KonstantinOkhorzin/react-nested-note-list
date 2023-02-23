@@ -35,6 +35,40 @@ function App() {
     }
   };
 
+  const addSublist = (id, parentId = null) => {
+    if (parentId) {
+      const updatedNotes = [...notes];
+      const parentNote = findNoteById(parentId, updatedNotes);
+      parentNote.sublist = parentNote.sublist.map(note =>
+        note.id === id ? { ...note, sublistVisible: !note.sublistVisible } : note
+      );
+      setNotes(updatedNotes);
+    } else {
+      setNotes(notes =>
+        notes.map(note =>
+          note.id === id ? { ...note, sublistVisible: !note.sublistVisible } : note
+        )
+      );
+    }
+  };
+
+  const removeSublist = (id, parentId = null) => {
+    if (parentId) {
+      const updatedNotes = [...notes];
+      const parentNote = findNoteById(parentId, updatedNotes);
+      parentNote.sublist = parentNote.sublist.map(note =>
+        note.id === id ? { ...note, sublistVisible: !note.sublistVisible, sublist: [] } : note
+      );
+      setNotes(updatedNotes);
+    } else {
+      setNotes(notes =>
+        notes.map(note =>
+          note.id === id ? { ...note, sublistVisible: !note.sublistVisible, sublist: [] } : note
+        )
+      );
+    }
+  };
+
   const findNoteById = (id, notes) => {
     for (let note of notes) {
       if (note.id === id) {
@@ -51,7 +85,13 @@ function App() {
 
   return (
     <div>
-      <NoteList notes={notes} onAddNewNote={addNewNote} onRemoveNote={removeNote} />
+      <NoteList
+        notes={notes}
+        onAddNewNote={addNewNote}
+        onRemoveNote={removeNote}
+        onAddSublist={addSublist}
+        onRemoveSublist={removeSublist}
+      />
       <FormAddingNewNote onAddNewNote={addNewNote} />
     </div>
   );

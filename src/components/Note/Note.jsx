@@ -3,16 +3,38 @@ import PropTypes from 'prop-types';
 import NoteList from '../NoteList';
 import FormAddingNewNote from '../FormAddingNewNote';
 
-const Note = ({ id, parentId, text, sublist, sublistVisible, onAddNewNote, onRemoveNote }) => {
+const Note = ({
+  id,
+  parentId,
+  text,
+  sublist,
+  sublistVisible,
+  onAddNewNote,
+  onRemoveNote,
+  onAddSublist,
+  onRemoveSublist,
+}) => {
   return (
     <li>
-      {sublistVisible ? <button>Remove sublist</button> : <button>Add sublist</button>}
+      {sublist.length > 0 ? (
+        <button onClick={() => onRemoveSublist(id, parentId)}>Remove sublist</button>
+      ) : (
+        <button onClick={() => onAddSublist(id, parentId)}>Add sublist</button>
+      )}
       <input defaultValue={text} />
       <button onClick={() => onRemoveNote(id, parentId)}>Remove</button>
-      <div>
-        <NoteList notes={sublist} onAddNewNote={onAddNewNote} onRemoveNote={onRemoveNote} />
-        <FormAddingNewNote onAddNewNote={onAddNewNote} parentId={id} />
-      </div>
+      {sublistVisible && (
+        <div>
+          <NoteList
+            notes={sublist}
+            onAddNewNote={onAddNewNote}
+            onRemoveNote={onRemoveNote}
+            onAddSublist={onAddSublist}
+            onRemoveSublist={onRemoveSublist}
+          />
+          <FormAddingNewNote onAddNewNote={onAddNewNote} parentId={id} />
+        </div>
+      )}
     </li>
   );
 };
@@ -25,6 +47,8 @@ Note.propTypes = {
   onAddNewNote: PropTypes.func.isRequired,
   onRemoveNote: PropTypes.func.isRequired,
   parentId: PropTypes.number,
+  onAddSublist: PropTypes.func.isRequired,
+  onRemoveSublist: PropTypes.func.isRequired,
 };
 
 export default Note;
