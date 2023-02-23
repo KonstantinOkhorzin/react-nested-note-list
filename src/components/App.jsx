@@ -12,6 +12,7 @@ function App() {
       text,
       sublist: [],
       sublistVisible: false,
+      parentId,
     };
     if (parentId) {
       const updatedNotes = [...notes];
@@ -20,6 +21,17 @@ function App() {
       setNotes(updatedNotes);
     } else {
       setNotes(notes => [...notes, newNote]);
+    }
+  };
+
+  const removeNote = (id, parentId = null) => {
+    if (parentId) {
+      const updatedNotes = [...notes];
+      const parentNote = findNoteById(parentId, updatedNotes);
+      parentNote.sublist = parentNote.sublist.filter(note => note.id !== id);
+      setNotes(updatedNotes);
+    } else {
+      setNotes(notes => notes.filter(note => note.id !== id));
     }
   };
 
@@ -39,7 +51,7 @@ function App() {
 
   return (
     <div>
-      <NoteList notes={notes} onAddNewNote={addNewNote} />
+      <NoteList notes={notes} onAddNewNote={addNewNote} onRemoveNote={removeNote} />
       <FormAddingNewNote onAddNewNote={addNewNote} />
     </div>
   );

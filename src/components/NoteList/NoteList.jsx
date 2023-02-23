@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 
 import Note from '../Note';
 
-const NoteList = ({ notes, onAddNewNote }) => {
+const NoteList = ({ notes, ...restProps }) => {
   return (
     <ul>
       {notes.map(note => (
-        <Note key={note.id} {...note} onAddNewNote={onAddNewNote} />
+        <Note key={note.id} {...note} {...restProps} />
       ))}
     </ul>
   );
