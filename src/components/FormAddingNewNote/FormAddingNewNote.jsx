@@ -1,19 +1,27 @@
-import {useState} from 'react';
+import { useState } from 'react';
+import PropTypes from 'prop-types';
 
-const FormAddingNewNote = () => {
-    const [text, setText] = useState('');
+const FormAddingNewNote = ({ onAddNewNote, parentId }) => {
+  const [text, setText] = useState('');
 
-    const onFormSubmit = (e) => {
-        e.preventDefault();
-        setText('');
-    }
+  const onFormSubmit = e => {
+    e.preventDefault();
 
-    return (
-      <form onSubmit={onFormSubmit}>
-        <input value={text} onChange={e => setText(e.target.value)} />
-        <button>Add</button>
-      </form>
-    );
+    onAddNewNote(text, parentId);
+    setText('');
+  };
+
+  return (
+    <form onSubmit={onFormSubmit}>
+      <input value={text} onChange={e => setText(e.target.value)} />
+      <button>Add</button>
+    </form>
+  );
+};
+
+FormAddingNewNote.propTypes = {
+  onAddNewNote: PropTypes.func.isRequired,
+  parentId: PropTypes.number,
 };
 
 export default FormAddingNewNote;
