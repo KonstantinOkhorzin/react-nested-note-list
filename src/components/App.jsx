@@ -69,6 +69,49 @@ function App() {
     }
   };
 
+  const moveUpNote = (id, parentId = null) => {
+    const updatedNotes = [...notes];
+    const parentNote = parentId ? findNoteById(parentId, updatedNotes) : null;
+    const currentIndex = parentNote
+      ? parentNote.sublist.findIndex(note => note.id === id)
+      : updatedNotes.findIndex(note => note.id === id);
+    if (currentIndex > 0) {
+      const newIndex = currentIndex - 1;
+      if (parentNote) {
+        const currentNote = parentNote.sublist[currentIndex];
+        parentNote.sublist.splice(currentIndex, 1);
+        parentNote.sublist.splice(newIndex, 0, currentNote);
+      } else {
+        const currentNote = updatedNotes[currentIndex];
+        updatedNotes.splice(currentIndex, 1);
+        updatedNotes.splice(newIndex, 0, currentNote);
+      }
+      setNotes(updatedNotes);
+    }
+  };
+
+  const moveDownNote = (id, parentId = null) => {
+    const updatedNotes = [...notes];
+    const parentNote = parentId ? findNoteById(parentId, updatedNotes) : null;
+    const currentIndex = parentNote
+      ? parentNote.sublist.findIndex(note => note.id === id)
+      : updatedNotes.findIndex(note => note.id === id);
+    if (parentNote && currentIndex === parentNote.sublist.length - 1) return;
+    if (currentIndex < updatedNotes.length - 1) {
+      const newIndex = currentIndex + 1;
+      if (parentNote) {
+        const currentNote = parentNote.sublist[currentIndex];
+        parentNote.sublist.splice(currentIndex, 1);
+        parentNote.sublist.splice(newIndex, 0, currentNote);
+      } else {
+        const currentNote = updatedNotes[currentIndex];
+        updatedNotes.splice(currentIndex, 1);
+        updatedNotes.splice(newIndex, 0, currentNote);
+      }
+      setNotes(updatedNotes);
+    }
+  };
+
   const findNoteById = (id, notes) => {
     for (let note of notes) {
       if (note.id === id) {
@@ -91,6 +134,8 @@ function App() {
         onRemoveNote={removeNote}
         onAddSublist={addSublist}
         onRemoveSublist={removeSublist}
+        onMoveUpNote={moveUpNote}
+        onMoveDownNote={moveDownNote}
       />
       <FormAddingNewNote onAddNewNote={addNewNote} />
     </div>

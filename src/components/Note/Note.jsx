@@ -13,15 +13,23 @@ const Note = ({
   onRemoveNote,
   onAddSublist,
   onRemoveSublist,
+  isFirstNote,
+  isLastNote,
+  onMoveUpNote,
+  onMoveDownNote,
 }) => {
   return (
     <li>
       {sublist.length > 0 ? (
         <button onClick={() => onRemoveSublist(id, parentId)}>Remove sublist</button>
       ) : (
-        <button onClick={() => onAddSublist(id, parentId)}>Add sublist</button>
+        <button onClick={() => onAddSublist(id, parentId)}>
+          {sublistVisible ? 'Hide form' : 'Add sublist'}
+        </button>
       )}
       <input defaultValue={text} />
+      {!isFirstNote && <button onClick={() => onMoveUpNote(id, parentId)}>Up</button>}
+      {!isLastNote && <button onClick={() => onMoveUpNote(id, parentId)}>Down</button>}
       <button onClick={() => onRemoveNote(id, parentId)}>Remove</button>
       {sublistVisible && (
         <div>
@@ -31,6 +39,8 @@ const Note = ({
             onRemoveNote={onRemoveNote}
             onAddSublist={onAddSublist}
             onRemoveSublist={onRemoveSublist}
+            onMoveUpNote={onMoveUpNote}
+            onMoveDownNote={onMoveDownNote}
           />
           <FormAddingNewNote onAddNewNote={onAddNewNote} parentId={id} />
         </div>
@@ -49,6 +59,10 @@ Note.propTypes = {
   parentId: PropTypes.number,
   onAddSublist: PropTypes.func.isRequired,
   onRemoveSublist: PropTypes.func.isRequired,
+  isFirstNote: PropTypes.bool.isRequired,
+  isLastNote: PropTypes.bool.isRequired,
+  onMoveUpNote: PropTypes.func.isRequired,
+  onMoveDownNote: PropTypes.func.isRequired,
 };
 
 export default Note;

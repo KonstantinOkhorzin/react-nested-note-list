@@ -5,8 +5,14 @@ import Note from '../Note';
 const NoteList = ({ notes, ...restProps }) => {
   return (
     <ul>
-      {notes.map(note => (
-        <Note key={note.id} {...note} {...restProps} />
+      {notes.map((note, index) => (
+        <Note
+          key={note.id}
+          {...note}
+          {...restProps}
+          isFirstNote={index === 0}
+          isLastNote={index === notes.length - 1}
+        />
       ))}
     </ul>
   );
